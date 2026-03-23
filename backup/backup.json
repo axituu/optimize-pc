@@ -1,0 +1,225 @@
+{
+  "appx_removed": [
+    "Microsoft.XboxApp",
+    "Microsoft.XboxGamingOverlay",
+    "Microsoft.XboxIdentityProvider",
+    "Microsoft.XboxSpeechToTextOverlay",
+    "Microsoft.Xbox.TCUI",
+    "Microsoft.BingWeather",
+    "Microsoft.BingNews",
+    "Microsoft.BingFinance",
+    "Microsoft.WindowsMaps",
+    "Microsoft.3DBuilder",
+    "Microsoft.Microsoft3DViewer",
+    "Microsoft.MixedReality.Portal",
+    "Microsoft.People",
+    "Microsoft.MicrosoftSolitaireCollection",
+    "Microsoft.Getstarted",
+    "Microsoft.MicrosoftOfficeHub",
+    "Microsoft.549981C3F5F10"
+  ],
+  "services": {
+    "SysMain": "Automatic",
+    "WSearch": "Automatic",
+    "DiagTrack": "Automatic",
+    "WerSvc": "Manual",
+    "RemoteRegistry": "Disabled",
+    "Fax": "Manual",
+    "bthserv": "Manual"
+  },
+  "registry": {
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\VisualFXSetting": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects",
+      "name": "VisualFXSetting",
+      "value": null,
+      "type": null
+    },
+    "HKCU\\Control Panel\\Desktop\\WindowMetrics\\MinAnimate": {
+      "hive": "HKCU",
+      "path": "Control Panel\\Desktop\\WindowMetrics",
+      "name": "MinAnimate",
+      "value": "1",
+      "type": "STRING"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarAnimations": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+      "name": "TaskbarAnimations",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\DWM\\EnableAeroPeek": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\DWM",
+      "name": "EnableAeroPeek",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\EnableTransparency": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+      "name": "EnableTransparency",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SoftLandingEnabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SoftLandingEnabled",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-338389Enabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SubscribedContent-338389Enabled",
+      "value": 0,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SubscribedContent-338393Enabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SubscribedContent-338393Enabled",
+      "value": 0,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SystemPaneSuggestionsEnabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SystemPaneSuggestionsEnabled",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\SilentInstalledAppsEnabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SilentInstalledAppsEnabled",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection\\AllowTelemetry": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+      "name": "AllowTelemetry",
+      "value": 0,
+      "type": "DWORD"
+    },
+    "HKCU\\System\\GameConfigStore\\GameDVR_Enabled": {
+      "hive": "HKCU",
+      "path": "System\\GameConfigStore",
+      "name": "GameDVR_Enabled",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR\\AllowGameDVR": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR",
+      "name": "AllowGameDVR",
+      "value": null,
+      "type": null
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization\\DODownloadMode": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+      "name": "DODownloadMode",
+      "value": null,
+      "type": null
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet\\SubmitSamplesConsent": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet",
+      "name": "SubmitSamplesConsent",
+      "value": null,
+      "type": null
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet\\SpynetReporting": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet",
+      "name": "SpynetReporting",
+      "value": null,
+      "type": null
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\GlobalUserDisabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications",
+      "name": "GlobalUserDisabled",
+      "value": null,
+      "type": null
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy\\LetAppsRunInBackground": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy",
+      "name": "LetAppsRunInBackground",
+      "value": null,
+      "type": null
+    },
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search\\AllowCortana": {
+      "hive": "HKLM",
+      "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search",
+      "name": "AllowCortana",
+      "value": null,
+      "type": null
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo\\Enabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+      "name": "Enabled",
+      "value": 0,
+      "type": "DWORD"
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USB\\DisableSelectiveSuspend": {
+      "hive": "HKLM",
+      "path": "SYSTEM\\CurrentControlSet\\Services\\USB",
+      "name": "DisableSelectiveSuspend",
+      "value": null,
+      "type": null
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet\\EnableActiveProbing": {
+      "hive": "HKLM",
+      "path": "SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet",
+      "name": "EnableActiveProbing",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\RotatingLockScreenEnabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "RotatingLockScreenEnabled",
+      "value": 1,
+      "type": "DWORD"
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\\RotatingLockScreenOverlayEnabled": {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "RotatingLockScreenOverlayEnabled",
+      "value": 0,
+      "type": "DWORD"
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power\\HiberbootEnabled": {
+      "hive": "HKLM",
+      "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+      "name": "HiberbootEnabled",
+      "value": 1,
+      "type": "DWORD"
+    }
+  },
+  "tasks": {
+    "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser": false,
+    "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator": true,
+    "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip": true,
+    "\\Microsoft\\Windows\\Disk Diagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector": false,
+    "\\Microsoft\\Windows\\Maintenance\\WinSAT": true,
+    "\\Microsoft\\Windows\\Maps\\MapsToastTask": true,
+    "\\Microsoft\\Windows\\Maps\\MapsUpdateTask": false,
+    "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag": true,
+    "\\Microsoft\\Windows\\WindowsUpdate\\Automatic App Update": false
+  },
+  "restore_cmds": {
+    "wake_timers": [
+      "powercfg /setacvalueindex SCHEME_CURRENT SUB_SLEEP RTCWAKE 1",
+      "powercfg /setdcvalueindex SCHEME_CURRENT SUB_SLEEP RTCWAKE 1",
+      "powercfg /setactive SCHEME_CURRENT"
+    ]
+  }
+}

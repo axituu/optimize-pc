@@ -1,0 +1,261 @@
+================================================================================
+  THINKPAD PC OPTIMIZER — MASTER PLAN
+================================================================================
+
+Target machine : Lenovo ThinkPad GenX12, Windows 11 Pro
+Language       : Python 3.x + customtkinter (dark-mode GUI)
+Requirement    : Must be run as Administrator
+
+--------------------------------------------------------------------------------
+PURPOSE
+--------------------------------------------------------------------------------
+
+A reusable GUI tool that:
+  - Removes pre-installed Microsoft bloatware (AppX packages)
+  - Disables privacy-invasive telemetry services and registry keys
+  - Optimises Windows performance (visual effects, background services, tasks)
+  - Improves battery life without ever touching power plans
+  - Backs up every change and provides a one-click Restore tab to undo it all
+
+HARD RULES — never violated by any code path:
+  1. Power plans are NEVER modified (user has 3 custom Lenovo Vantage presets)
+  2. Lenovo Vantage, ThinkPad Vantage, Lenovo System Update, LenovoID,
+     LenovoSettings and ImControllerService are PROTECTED and never removed
+  3. AppX removal is irreversible by this tool — user is warned before apply
+  4. Every other change (registry, services, tasks) is backed up before apply
+     and is fully restorable from the Restore tab
+
+--------------------------------------------------------------------------------
+PRESET LEVELS
+--------------------------------------------------------------------------------
+
+  Clear All  (0 tweaks)  — Unchecks everything
+  Safe      (16 tweaks)  — Registry-only, zero risk, fully reversible
+  Medium    (29 tweaks)  — Safe + service disabling + deeper registry  [DEFAULT]
+  Full      (48 tweaks)  — Medium + all bloatware AppX removal
+
+  Risky/optional items (Print Spooler, Hibernation, AHCI LPM, NIC WoL,
+  Skype, OneNote, To-Do, Feedback Hub, McAfee) are NEVER auto-selected
+  by any preset — the user ticks those manually.
+
+  After picking a preset the user can still manually tick/untick any item.
+  Active preset button gets a white border highlight.
+
+--------------------------------------------------------------------------------
+FOLDER / FILE STRUCTURE
+--------------------------------------------------------------------------------
+
+  optimize pc/
+  │
+  ├── main.py                  Entry point — admin elevation check, launches AppWindow
+  ├── presets.py               Preset ID sets: SAFE, MEDIUM, FULL + button metadata
+  ├── PLAN.txt                 This file
+  ├── requirements.txt         customtkinter (UAC elevation uses built-in ctypes — no extra package)
+  ├── launcher.bat             Double-click launcher (requests admin, runs main.py)
+  │
+  ├── gui/
+  │   ├── app_window.py        Root CTk window — title bar, preset bar, tabs, panels
+  │   ├── tab_bloatware.py     AppX removal tab — checkboxes, warnings, set_preset()
+  │   ├── tab_performance.py   Services + Registry + Tasks — set_preset()
+  │   ├── tab_battery.py       Battery efficiency tab — set_preset()
+  │   ├── tab_restore.py       Restore tab — reads backup.json, re-applies originals
+  │   ├── log_panel.py         Scrollable log text box (thread-safe append)
+  │   └── progress_panel.py    Apply button + progress bar + status label
+  │
+  ├── tweaks/
+  │   ├── bloatware.py         APPX_PACKAGES list + apply_appx_removal()
+  │   ├── performance.py       SERVICES + REGISTRY_TWEAKS + apply_service/registry_tweak()
+  │   ├── battery.py           BATTERY_TWEAKS list + apply_battery_tweak()
+  │   └── scheduled_tasks.py   TASKS list + apply_task_disable()
+  │
+  └── core/
+      ├── admin_check.py       is_admin() + re-launch with UAC elevation
+      ├── backup_manager.py    record_*() functions — writes to backup.json
+      ├── restore_engine.py    Reads backup.json, restores services/registry/tasks
+      ├── executor.py          run_ps() — runs PowerShell commands, captures output
+      └── reg_query.py         query_reg_value() — reads current registry values
+
+--------------------------------------------------------------------------------
+HOW APPLYING WORKS (data flow)
+--------------------------------------------------------------------------------
+
+  1. User selects tweaks (manually or via preset) and clicks Apply
+  2. If AppX packages are selected, a confirmation dialog is shown
+  3. A background daemon thread iterates in this order:
+       AppX → Services → Registry → Tasks → Battery
+  4. Each step:
+       a. backup_manager.is_already_backed_up() — skip backup if done before
+       b. backup_manager.record_*()             — save original value to backup.json
+       c. executor.run_ps()                     — execute the PowerShell command
+       d. log_callback(message)                 — update the GUI log panel
+  5. Progress bar + log panel update in real time
+  6. On completion: "Restart recommended" message shown
+
+  Thread safety: _apply_worker runs in a daemon thread.
+  All GUI updates use self.after(0, ...) — tkinter is not thread-safe.
+
+--------------------------------------------------------------------------------
+HOW THE RESTORE SYSTEM WORKS
+--------------------------------------------------------------------------------
+
+  backup.json is written next to main.py at runtime (not committed to git).
+  Every apply records the ORIGINAL value ONCE — first-apply wins, so the
+  pre-tool state is always preserved even if you apply multiple times.
+
+  What is backed up per category:
+    Services  — original StartType string (e.g. "Automatic")
+    Registry  — original DWORD/String value + type, or null if key didn't exist
+    Tasks     — whether the task was originally enabled (true/false)
+    AppX      — package name only, informational, CANNOT be restored
+
+  backup.json structure:
+    {
+      "services":  { "SysMain": "Automatic", "WSearch": "AutomaticDelayedStart" },
+      "registry": {
+        "HKCU\\...\\EnableTransparency": {
+          "hive": "HKCU", "path": "...", "name": "EnableTransparency",
+          "value": 1, "type": "DWord"
+        },
+        "HKLM\\...\\AllowTelemetry": {
+          "hive": "HKLM", "path": "...", "name": "AllowTelemetry",
+          "value": null, "type": null      <-- key didn't exist before, will be deleted on restore
+        }
+      },
+      "tasks":  { "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag": true },
+      "appx":   ["Microsoft.XboxApp", ...]
+    }
+
+  Restore order (Restore tab, reverse of apply):
+    1. Restore registry keys (Set-ItemProperty or Remove-ItemProperty)
+    2. Restore services (StartType only — does not start/stop them live)
+    3. Re-enable scheduled tasks (only those that were originally enabled)
+    4. AppX section is shown informational — no restore button
+
+  Special cases:
+    hibernation  — has explicit restore_cmds: ["powercfg /hibernate on"]
+    wake_timers  — has restore_cmds that re-enable wake timers via powercfg
+
+  After restoring, a restart is recommended. Services restored to "Automatic"
+  won't auto-start until the next boot.
+
+--------------------------------------------------------------------------------
+TWEAKS REFERENCE
+--------------------------------------------------------------------------------
+
+  Legend: S = Safe preset   M = Medium preset   F = Full preset   — = manual only
+
+  ── BLOATWARE (AppX packages) ── tweaks/bloatware.py ──────────────────────────
+
+  ID               Label                          Default  Preset
+  xbox_app         Xbox App                          Y       F
+  xbox_gamebar     Xbox Game Bar (overlay)           Y       F
+  xbox_identity    Xbox Identity Provider            Y       F
+  xbox_speech      Xbox Speech To Text               Y       F
+  xbox_tcui        Xbox TCUI (social overlay)        Y       F
+  bing_weather     Bing Weather                      Y       F
+  bing_news        Bing News                         Y       F
+  bing_finance     Bing Finance                      Y       F
+  maps             Microsoft Maps                    Y       F
+  3d_builder       3D Builder                        Y       F
+  3d_viewer        3D Viewer                         Y       F
+  mixed_reality    Mixed Reality Portal              Y       F    (HoloLens/VR)
+  people           Microsoft People                  Y       F    (duplicates Outlook)
+  solitaire        Microsoft Solitaire Collection    Y       F    (has ads)
+  tips             Tips / Get Started                Y       F
+  office_hub       Office Hub                        Y       F    ("Buy Office" ad)
+  cortana          Cortana                           Y       F    (high idle CPU/RAM)
+  todo             Microsoft To-Do                   N       —    keep if you use it
+  skype            Skype                             N       —
+  onenote          OneNote (Store version)           N       —    keep if using desktop
+  feedback_hub     Feedback Hub                      N       —
+  mcafee           McAfee (Lenovo trial AV)          N       —    wildcard *McAfee*
+
+  NOTE: AppX removal is NOT reversible by the Restore tab.
+
+  ── SERVICES ── tweaks/performance.py :: SERVICES ─────────────────────────────
+
+  ID               Service          Target     Default  Preset
+  sysmain          SysMain          Disabled     Y       M    (not needed on NVMe SSD)
+  wsearch          WSearch          Manual       Y       M    (stops background indexing)
+  diagtrack        DiagTrack        Disabled     Y       M    (Windows telemetry)
+  wer_svc          WerSvc           Disabled     Y       M    (crash reports to MS)
+  remote_registry  RemoteRegistry   Disabled     Y       M    (remote registry access)
+  fax              Fax              Disabled     Y       M    (unused on modern hardware)
+  spooler          Spooler          Disabled     N       —    ONLY if no printer attached
+
+  ── REGISTRY TWEAKS ── tweaks/performance.py :: REGISTRY_TWEAKS ───────────────
+
+  ID               Default  Preset  What it does
+  visual_effects     Y       M      Best performance — disables animations/shadows/fades
+  transparency       Y       S      Disable transparent UI (saves GPU + battery)
+  tips_suggestions   Y       S      Stop suggested apps, tips popups, Start menu ads
+  telemetry          Y       M      AllowTelemetry=1 (Security/minimal) via HKLM policy
+  game_dvr           Y       S      Disable Xbox Game DVR background recording hooks
+  delivery_opt       Y       S      Disable P2P upload of downloaded Windows updates
+  defender_samples   Y       M      Stop file uploads to MS cloud; real-time AV stays ON
+  bg_apps            Y       S      Disable UWP background execution globally
+  cortana_search     Y       S      Disable Cortana in Windows Search via policy
+  advertising_id     Y       S      Stop per-user ad tracking ID
+  hibernation        N       —      Frees ~4-8 GB hiberfil.sys — ONLY if never hibernating
+
+  ── BATTERY TWEAKS ── tweaks/battery.py :: BATTERY_TWEAKS ─────────────────────
+
+  ID                   Default  Preset  Type      What it does
+  usb_selective_suspend  Y       S      registry  Allow idle USB to suspend (saves power)
+  wifi_scan              Y       S      registry  Disable NLA probing, reduce WLAN scan
+  bluetooth_manual       Y       M      service   Bluetooth manual start (not auto on boot)
+  wake_timers            Y       S      powercfg  Stop background tasks waking from sleep
+  lock_screen_spotlight  N       F      registry  Disable rotating lock screen ads
+  fast_startup           Y       S      registry  Hybrid boot — faster startup on ThinkPad
+  ahci_lpm               N       —      registry  NVMe/SATA link power states (~0.5W saving)
+  nic_wol                N       —      command   Disable Wake-on-LAN + NIC power override
+
+  NOTE: wake_timers uses powercfg SCHEME_CURRENT — modifies one setting of the
+  currently active plan only. The plan itself is not changed.
+
+  ── SCHEDULED TASKS ── tweaks/scheduled_tasks.py :: TASKS ─────────────────────
+
+  ID                  Default  Preset  Task
+  compat_appraiser      Y       M      Microsoft Compatibility Appraiser (upgrade telemetry)
+  ceip_consolidator     Y       S      CEIP Consolidator (usage telemetry to MS)
+  ceip_usb              Y       S      CEIP UsbCeip (USB device tracking)
+  disk_diag             Y       M      Disk Diagnostic Data Collector
+  winsat                Y       M      WinSAT performance benchmark (useless on modern HW)
+  maps_toast            Y       S      Maps toast notifications
+  maps_update           Y       S      Maps background map data updates
+  defrag                Y       S      ScheduledDefrag (pointless on SSD)
+  wu_auto_app           N       F      Windows Update automatic Store app updates
+
+--------------------------------------------------------------------------------
+ROADMAP
+--------------------------------------------------------------------------------
+
+  DONE
+  [x] Tabbed GUI: Bloatware / Performance / Battery / Restore
+  [x] Every tweak has its own checkbox with description
+  [x] Select All / Select None per tab
+  [x] Preset bar: Clear All / Safe / Medium / Full with live counter badge
+  [x] Medium preset auto-selected on launch
+  [x] Active preset highlighted with white border
+  [x] Backup-before-apply system (backup.json)
+  [x] Restore tab to undo all reversible changes
+  [x] AppX removal with irreversibility warning dialog
+  [x] Lenovo Vantage protection hard-coded
+  [x] Power plans never touched
+  [x] Admin elevation via launcher.bat
+  [x] Real-time log panel + progress bar
+  [x] Background thread for apply (GUI stays responsive)
+  [x] Card-style tweak rows (bold label + grey description)
+
+  TODO / IDEAS
+  [ ] Per-section Select All/None on Performance tab (Services, Registry, Tasks separate)
+  [ ] "What changed?" summary dialog after Apply completes
+  [ ] Selective restore — tick individual items instead of Restore All
+  [ ] Export settings as shareable profile JSON / Import profile JSON
+  [ ] Startup check: detect if tweaks reverted by Windows Update and notify
+  [ ] System info panel: RAM, CPU, current power plan name, battery health
+  [ ] Dark/light mode toggle in title bar
+  [ ] Portable EXE build via PyInstaller (single .exe, no Python install needed)
+  [ ] ThinkPad-specific tweaks: TrackPoint speed, keyboard backlight timeout
+
+================================================================================
