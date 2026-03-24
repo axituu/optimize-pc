@@ -117,7 +117,7 @@ class AppWindow(ctk.CTk):
 
         ctk.CTkLabel(
             title_stack,
-            text="v2.0  ·  System Optimization Suite",
+            text="v1.2.0  ·  System Optimization Suite",
             font=ctk.CTkFont(family="Segoe UI", size=10),
             text_color=("#555577", "#8888aa"),
         ).pack(anchor="w")
