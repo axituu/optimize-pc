@@ -13,7 +13,7 @@ if (-not (Get-Command pyinstaller -ErrorAction SilentlyContinue)) {
 
 # Build the exe
 Write-Host "Building dist\PC-Optimizer.exe ..." -ForegroundColor Cyan
-pyinstaller optimizer.spec --clean --noconfirm
+python -m PyInstaller optimizer.spec --clean --noconfirm
 
 Write-Host ""
 if (Test-Path "dist\PC-Optimizer.exe") {

@@ -1,17 +1,17 @@
-# ThinkPad PC Optimizer ⚙️
+# Gaming PC Optimizer ⚙️
 
-A powerful, reusable GUI tool built in Python and `customtkinter` designed to optimize Windows 11 performance, privacy, and battery life—specifically tailored for **Lenovo ThinkPads** and high-performance gaming rigs.
+A powerful, reusable GUI tool built in Python and `customtkinter` designed to optimize Windows 11 performance, privacy, and gaming frame rates—with an extra optional mode tailored for **Lenovo ThinkPads**.
 
 ---
 
 ## 🚀 Key Features
 
+- **Gaming Performance**: Maximizes GPU and CPU availability for gaming workloads and stops unnecessary background processes that cause stuttering.
 - **Bloatware Removal**: One-click removal of pre-installed Microsoft AppX packages (Xbox, News, Weather, etc.).
 - **Privacy & Telemetry**: Disables invasive Windows tracking, background data collection, and advertising IDs.
-- **Performance Optimization**: Tweaks background services, registry settings, and scheduled tasks for maximum speed.
-- **Battery Efficiency**: Implements power-saving registry tweaks and disables wake timers without touching your existing power plans.
+- **System Optimization**: Tweaks background services, registry settings, and scheduled tasks for maximum speed.
 - **Safe & Reversible**: Automatically backs up original settings before every change. The **Restore** tab allows you to undo registry, service, and task changes with one click.
-- **ThinkPad Protected**: Hard-coded protection for essential Lenovo software (Vantage, System Update, ImController) to ensure your hardware controls remain functional.
+- **Optional ThinkPad Protection**: Hard-coded protection for essential Lenovo software (Vantage, System Update, ImController) if you choose to use the tool on a ThinkPad.
 
 ---
 
@@ -19,8 +19,8 @@ A powerful, reusable GUI tool built in Python and `customtkinter` designed to op
 
 The optimizer features two distinct operating modes:
 
-1.  **ThinkPad Mode (Default)**: Optimized for daily professional use. Power plans are left untouched, and Lenovo Vantage services are strictly protected.
-2.  **Gaming PC Mode**: Lifts all restrictions. Allows for deeper bloatware removal and maximum performance settings for dedicated gaming machines.
+1.  **Gaming PC Mode (Default)**: Lifts all restrictions. Allows for deeper bloatware removal and maximum performance settings for dedicated gaming machines.
+2.  **ThinkPad Mode (Optional)**: Optimized for daily professional use. Power plans are left untouched, and Lenovo Vantage services are strictly protected.
 
 ---
 
@@ -54,7 +54,7 @@ The output will be located in the `dist/` folder.
 
 - **Administrator Privileges**: This tool modifies system registry keys and services; it **must** be run as an Administrator.
 - **AppX Removal**: Removing Windows Store apps (Bloatware) is **not reversible** via the Restore tab. Please review the selection before applying.
-- **No Power Plan Modification**: This tool honors the "Golden Rule" of ThinkPad optimization: it never touches Windows Power Plans, allowing Lenovo Vantage to manage thermal profiles safely.
+- **Power Plan Modification**: In ThinkPad Mode, the tool never touches Windows Power Plans, allowing Lenovo Vantage to manage thermal profiles safely. In Gaming PC mode, maximum performance is prioritized.
 
 ---
 
